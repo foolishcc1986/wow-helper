@@ -1,0 +1,16 @@
+{
+    "skills": "1|2|3|4|5|6|7|Q|E",
+    "is_random_action": true,
+    "is_warning": false,
+    "is_auto_login": true,
+    "login_loadtime": 15,
+    "clear_shoot_file": false,
+    "compare_value": 0.65,
+    "check_offline_interval": 40,
+    "sleep_min_time": 120,
+    "sleep_max_time": 240,
+    "hiden_mode": true,
+    "app_id": "",
+    "api_key": "",
+    "scret_key": ""
+}
