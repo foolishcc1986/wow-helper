@@ -4,10 +4,8 @@ from datetime import datetime
 from random import randint, choice
 from functools import partialmethod, wraps
 
-from win32gui import ShowWindow, EnumWindows, GetClassName, MoveWindow, SetForegroundWindow, GetForegroundWindow, \
-    SendMessage, FindWindow, \
-    IsIconic  # 是否最小化
-from win32api import keybd_event, MapVirtualKey, SetCursorPos, OpenProcess, CloseHandle
+from win32gui import ShowWindow, EnumWindows, GetClassName, MoveWindow, SendMessage, FindWindow, IsIconic
+from win32api import keybd_event, MapVirtualKey, OpenProcess, CloseHandle
 from win32con import (KEYEVENTF_KEYUP, WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
                       VK_SHIFT, VK_CONTROL, VK_MENU, VK_SNAPSHOT, PROCESS_ALL_ACCESS,
                       SW_SHOW, SW_HIDE, SW_MINIMIZE, SW_RESTORE  # 窗口隐藏与最小化控制
@@ -365,6 +363,12 @@ class WowClientGuard(WowActionFactory, ComparePicture, OcrClientBaiDu):
         self._scene = 'not_running'
         self._wow_print_screen_path = ''
 
+    def send_gui_exception(self, msg):
+        self.log_function('-' * 40)
+        self.log_function('异常信息:')
+        self.log_function(msg)
+        self.log_function('-' * 40)
+
     @property
     def wow_print_screen_path(self):
         """
@@ -600,10 +604,7 @@ class WowClientGuard(WowActionFactory, ComparePicture, OcrClientBaiDu):
                 self.login_wow()
         except:
             self.log_function('%s: 处理掉线出错！' % (self.systime,))
-            self.log_function('-' * 40)
-            self.log_function('异常信息:')
-            self.log_function(traceback.format_exc())
-            self.log_function('-' * 40)
+            self.send_gui_exception(traceback.format_exc())
 
     @check_stop_siginal
     def open_wow_from_battle(self):
@@ -726,20 +727,14 @@ class WowClientGuard(WowActionFactory, ComparePicture, OcrClientBaiDu):
                         self.doing_random_action()
                 except:
                     self.log_function('%s: 执行随机动作出错!' % (self.systime,))
-                    self.log_function('-' * 40)
-                    self.log_function('异常信息:')
-                    self.log_function(traceback.format_exc())
-                    self.log_function('-' * 40)
+
                 sleep_begin_time = time.time()
                 sleep_time = randint(*sleep_time_range)
                 self.log_function('%s: 休眠%d秒后继续执行指令' % (self.systime, sleep_time))
                 next_check_scene_time = sleep_begin_time + self.check_offline_interval
         except:
             self.log_function('%s: 防掉线助手异常终止!' % (self.systime,), 1)
-            self.log_function('-' * 40)
-            self.log_function('异常信息:')
-            self.log_function(traceback.format_exc())
-            self.log_function('-' * 40)
+            self.send_gui_exception(traceback.format_exc())
         finally:
             self.wow_restore()
             self.log_function('%s: 防掉线保护已停止。' % (self.systime,))
