@@ -5,8 +5,8 @@ from threading import Thread
 import wx
 import wx.adv
 
-from wow_helper import WowClientGuard
-from CONFIG import *
+from core.wow_helper import WowClientGuard
+from conf.CONFIG import *
 
 WELCOME_TEXT = '一区德姆塞卡尔《阿拉索帝国》公会友情提供，欢迎各位朋友加入！'
 ALPHA_ONLY = 1
